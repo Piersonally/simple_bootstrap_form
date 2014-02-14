@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["gems@sampierson.com"]
   spec.summary       = %q{Bootstrap 3 Form Helper}
   spec.description   = %q{A form helper with a 'Simple Form'-like interface, that supports Bootstrap 3}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Piersonally/simple_bootstrap_form"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
