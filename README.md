@@ -18,7 +18,7 @@ is going to require a new feature in the base Simple Form framework.
 SimpleForm is a featurefull generic framework that will layout forms for
 multiple different CSS frameworks (right now Bootstrap 2.3 and Zurb Foundation).
 The challenge with this is that greater flexibility incurs greater complexity in
-imlementation.  I believe the continued non-appearance of Simple Form Bootstrap
+implementation.  I believe the continued non-appearance of Simple Form Bootstrap
 3 support reflects the difficulty people have in working in this more complex
 framework, and getting the results integrated and released.
 
