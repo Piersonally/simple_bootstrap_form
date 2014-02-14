@@ -52,6 +52,87 @@ with
 
     bootstrap_form_for ...
 
+For example:
+
+```haml
+= bootstrap_form_for @article_form do |f|
+  = f.input :title
+  = f.input :published_at
+  = f.input :visible
+  = f.input :body, rows: 20
+  = f.input :topic_names, label: 'Tags'
+```
+
+Generates (spaces added for clarity):
+
+```html
+<form accept-charset="UTF-8" action="/articles" class="form-horizontal"
+      id="new_article" method="post" role="form">
+  <div style="display:none"><input name="utf8" type="hidden" value="✓"><input
+    name="authenticity_token" type="hidden"
+    value="NYiknMBfTGqphSHozhG8NMCGQeWbRY6hzs2a0+gaxJw="></div>
+
+  <div class="form-group article_title_group"><label
+    class="control-label col-sm-3" for="article_title"><abbr
+    title="required">*</abbr> Title</label>
+
+    <div class="col-sm-6"><input class="form-control" id="article_title"
+                                 name="article[title]" placeholder="Title"
+                                 required="required" type="text"></div>
+  </div>
+
+  <div class="form-group article_published_at_group"><label
+    class="control-label col-sm-3" for="article_published_at">Published
+    at</label>
+    <div class="col-sm-6">
+      <div class="input-group"><input class="form-control"
+                                      id="article_published_at"
+                                      name="article[published_at]"
+                                      placeholder="Published at"
+                                      type="datetime">
+
+        <div class="input-group-addon"><span
+          class="glyphicon glyphicon-calendar"
+          data-activate-datepicker="#article_published_at"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group article_visible_group"><label
+    class="control-label col-sm-3" for="article_visible">Visible</label>
+
+    <div class="col-sm-6"><input name="article[visible]" type="hidden"
+                                 value="0"><input id="article_visible"
+                                                  name="article[visible]"
+                                                  type="checkbox" value="1">
+    </div>
+  </div>
+
+  <div class="form-group article_body_group"><label
+    class="control-label col-sm-3" for="article_body">Body</label>
+
+    <div class="col-sm-6"><textarea class="form-control" id="article_body"
+                                    name="article[body]" placeholder="Body"
+                                    rows="20"></textarea></div>
+  </div>
+
+  <div class="form-group article_topic_names_group"><label
+    class="control-label col-sm-3" for="article_topic_names">Tags</label>
+
+    <div class="col-sm-6"><input class="form-control" id="article_topic_names"
+                                 label="Tags" name="article[topic_names]"
+                                 placeholder="Topic names" type="text" value="">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-2">
+      <input class="btn btn-primary" name="commit" type="submit" value="Save">
+    </div>
+  </div>
+</form>
+```
+
 ## Support
 
 #### Bootstrap Support
