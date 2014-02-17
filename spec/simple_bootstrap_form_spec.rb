@@ -44,17 +44,34 @@ describe SimpleBootstrapForm, type: :helper do
     #end
 
     describe "the form" do
-      it "should have and ID" do
+      it "should have an ID" do
         should have_selector %(form##{form_id}[action="/accounts"])
-      end
-
-      it "should be a horizontal form" do
-        should have_selector "form##{form_id}.form-horizontal"
       end
 
       it "should have role 'form'" do
         should have_selector "form##{form_id}[role=form]"
       end
+    end
+
+    #describe "for vertical forms" do
+    #end
+
+    #describe "for inline forms" do
+    #  subject {
+    #    helper.bootstrap_form_for model, layout: 'inline' do |f|
+    #      f.input(:email)
+    #    end
+    #  }
+    #  it { should have_selector "form.form-inline" }
+    #end
+
+    describe "for horizontal forms" do
+      subject {
+        helper.bootstrap_form_for model, layout: 'horizontal' do |f|
+          f.input(:email)
+        end
+      }
+      it { should have_selector "form.form-horizontal" }
     end
 
     describe "f.input" do
@@ -151,6 +168,110 @@ describe SimpleBootstrapForm, type: :helper do
           it { should have_input("##{field_id}").with_type('checkbox') }
         end
       end
+    end
+  end
+
+  describe "getbootstrap.com examples" do
+    describe "Basic example" do
+      let(:basic_example_output_from_getbootstrap_dot_com) {
+        <<-BASIC_EXAMPLE
+<form role="form">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" id="exampleInputFile">
+    <p class="help-block">Example block-level help text here.</p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Check me out
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+        BASIC_EXAMPLE
+      }
+
+      let(:model) { Account.new }
+
+      def account_form
+        account = Account.new
+        helper.bootstrap_form_for model, {foo: :bar} do |f|
+          f.input(:email) +
+          f.input(:password) # +
+          #f.input(:file)
+        end
+      end
+
+      it "should generate the correct output" do
+        expect(account_form).to_not be_empty
+        #expect(account_form).to eq basic_example_output_from_getbootstrap_dot_com
+      end
+    end
+
+    describe "Inline form" do
+      let(:inline_form_from_getbootstrap_dot_com) {
+        <<-INLINE_FORM
+<form class="form-inline" role="form">
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword2">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Remember me
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Sign in</button>
+</form>
+        INLINE_FORM
+      }
+    end
+
+    describe "Horizontal form" do
+      let(:horizontal_form_output_from_getbootstrap_dot_com) {
+        <<-HORIZONTAL_FORM
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div>
+</form>
+        HORIZONTAL_FORM
+      }
     end
   end
 end
