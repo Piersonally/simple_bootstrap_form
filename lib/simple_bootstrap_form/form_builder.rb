@@ -26,9 +26,14 @@ module SimpleBootstrapForm
       options
     end
 
+    def layout_css_class
+      raise "You must inplement layout_css_class in your
+             SimpleBootstrapForm::FormBuilder subclass"
+    end
+
     def map_object_attribute_to_field_class(attr, options)
-      prefix = field_class_prefix attr, options
-      "SimpleBootstrapForm::Fields::#{prefix}Field".constantize
+      raise "You must inplement map_object_attribute_to_field_class in your
+             SimpleBootstrapForm::FormBuilder subclass"
     end
 
     def field_class_prefix(attr, options)
