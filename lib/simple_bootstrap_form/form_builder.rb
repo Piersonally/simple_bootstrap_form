@@ -1,6 +1,10 @@
 module SimpleBootstrapForm
   class FormBuilder < ActionView::Helpers::FormBuilder
 
+    def initialize(object_name, object, template, options, block=nil)
+      super object_name, object, template, builder_options(options), block
+    end
+
     # Context inherited from ActionView::Helpers::FormBuilder:
     #
     #   @template
@@ -12,6 +16,15 @@ module SimpleBootstrapForm
     end
 
     private
+
+    def builder_options(options)
+      @options = options.extract! :layout
+      options[:html] ||= {}
+      options[:html][:class] = CssClassList.new options[:html][:class]
+      options[:html][:role] ||= 'form'
+      options[:html][:class] << layout_css_class
+      options
+    end
 
     def map_object_attribute_to_field_class(attr, options)
       prefix = field_class_prefix attr, options
