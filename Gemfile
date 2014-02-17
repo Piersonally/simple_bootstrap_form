@@ -8,4 +8,6 @@ group :development, :test do
   # System
   gem 'guard-rspec', require: false
   gem 'terminal-notifier-guard'
+
+  gem 'byebug'
 end
