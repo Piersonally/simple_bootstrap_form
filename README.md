@@ -1,5 +1,7 @@
 # Bootstrap 3 Form Builder
 
+![CiecleCI Build Status](https://circleci.com/gh/Piersonally/simple_bootstrap_form.png?circle-token=1adabd4d96f92f6566f705581fb108ed59b31150)
+
 * I'm a fan of [Boootstrap](http://getbootstrap.com/)
 * I'm a fan of [Simple Form](https://github.com/plataformatec/simple_form)
 * Bootstrap 3 was released in August 2013, but as of February 2014 Simple Form
