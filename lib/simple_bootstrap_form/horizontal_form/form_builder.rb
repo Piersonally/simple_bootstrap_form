@@ -8,7 +8,8 @@ module SimpleBootstrapForm
         super object_name, object, template, options_for_rails_form_builder, block
       end
 
-      def input(name, options = {})
+      def input(name, supplied_options = {})
+        options = field_options(supplied_options)
         @field_factory.for_attribute(name, options).to_s
       end
 
@@ -35,6 +36,13 @@ module SimpleBootstrapForm
         css_classes = CssClassList.new options[:html][:class]
         css_classes << 'form-horizontal'
         css_classes
+      end
+
+      def field_options(supplied_options)
+        options = supplied_options.dup
+        options[:label_size] = field_label_size
+        options[:input_size] = input_size
+        options
       end
     end
   end
