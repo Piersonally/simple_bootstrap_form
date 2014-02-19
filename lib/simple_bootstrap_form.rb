@@ -1,7 +1,6 @@
 require 'simple_bootstrap_form'
 require 'simple_bootstrap_form/css_class_list'
 require 'simple_bootstrap_form/action_view_extensions'
-require 'simple_bootstrap_form/form_builder'
 require 'simple_bootstrap_form/field_factory'
 require 'simple_bootstrap_form/horizontal_form/form_builder'
 require 'simple_bootstrap_form/horizontal_form/fields/base_field'

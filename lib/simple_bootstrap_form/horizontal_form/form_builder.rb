@@ -1,10 +1,11 @@
 module SimpleBootstrapForm
   module HorizontalForm
-    class FormBuilder < ::SimpleBootstrapForm::FormBuilder
+    class FormBuilder < ActionView::Helpers::FormBuilder
 
-      def initialize(object_name, object, template, options, block=nil)
+      def initialize(object_name, object, template, options={}, block=nil)
         @field_factory = FieldFactory.new self, template
-        super object_name, object, template, builder_options(options), block
+        process_options options
+        super object_name, object, template, options_for_rails_form_builder, block
       end
 
       def input(name, options = {})
@@ -18,8 +19,22 @@ module SimpleBootstrapForm
 
       private
 
-      def layout_css_class
-        'form-horizontal'
+      def process_options(options )
+        @options = options.dup
+        @options.delete :layout
+      end
+
+      def options_for_rails_form_builder
+        @options[:html] ||= {}
+        @options[:html][:role] ||= 'form'
+        @options[:html][:class] = form_css_classes
+        @options
+      end
+
+      def form_css_classes
+        css_classes = CssClassList.new options[:html][:class]
+        css_classes << 'form-horizontal'
+        css_classes
       end
     end
   end
