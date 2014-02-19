@@ -40,9 +40,17 @@ module SimpleBootstrapForm
 
       def field_options(supplied_options)
         options = supplied_options.dup
-        options[:label_size] = field_label_size
-        options[:input_size] = input_size
+        options[:label_size] ||= field_label_size
+        options[:input_size] ||= field_input_size
         options
+      end
+
+      def field_label_size
+        @options[:label_size] || 'col-sm-3'
+      end
+
+      def field_input_size
+        @options[:input_size] || 'col-sm-6'
       end
     end
   end

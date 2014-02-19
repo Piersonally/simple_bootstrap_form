@@ -11,7 +11,7 @@ module SimpleBootstrapForm
           @form_builder = form_builder
           @template = template
           @name = name
-          @options = options.dup
+          process_options(options)
         end
 
         def to_s
@@ -23,6 +23,12 @@ module SimpleBootstrapForm
         end
 
         private
+
+        def process_options(options)
+          @options = options.dup
+          @label_size = @options.delete :label_size
+          @input_size = @options.delete :input_size
+        end
 
         def group_options
           css_classes = CssClassList.new 'form-group', group_name
@@ -52,12 +58,13 @@ module SimpleBootstrapForm
         end
 
         def label_options
-          css_classes = CssClassList.new 'control-label col-sm-3'
+          css_classes = CssClassList.new 'control-label'
+          css_classes << @label_size
           { class: css_classes }
         end
 
         def input_tag
-          @template.content_tag(:div, class: 'col-sm-6') do
+          @template.content_tag(:div, class: @input_size) do
             @form_builder.text_field @name, input_options
           end
         end

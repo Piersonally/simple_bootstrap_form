@@ -164,21 +164,50 @@ describe SimpleBootstrapForm, type: :helper do
       end
 
       describe "f.input" do
-        subject do
-          helper.bootstrap_form_for model, layout: 'horizontal' do |f|
-            f.input(:email)
-          end
-        end
         let(:field_id) { "account_email" }
 
-        describe "label" do
-          it "should make the label 3 columns wide" do
+        context "using size defaults" do
+          subject {
+            helper.bootstrap_form_for model, layout: 'horizontal' do |f|
+              f.input(:email)
+            end
+          }
+
+          it "should make the label col-sm-3 wide" do
             should have_selector "label.col-sm-3[for=#{field_id}]"
+          end
+
+          it "should place the input inside a col-sm-6" do
+            should have_selector "form##{form_id} > .form-group > .col-sm-6 > input##{field_id}"
           end
         end
 
-        it "should place the input inside a 6 column div" do
-          should have_selector "form##{form_id} > .form-group > .col-sm-6 > input##{field_id}"
+        context "when sizes are supplied to the form" do
+          subject {
+            helper.bootstrap_form_for model, layout: 'horizontal',
+                                             label_size: 'col-md-3',
+                                             input_size: 'col-md-6' do |f|
+              f.input :email
+            end
+          }
+
+          it "should use the form sizes for label and input" do
+              should have_selector "label.col-md-3[for=#{field_id}]"
+              should have_selector ".form-group > .col-md-6 > input##{field_id}"
+          end
+
+          context "when sizes are supplied to the input" do
+            subject {
+              helper.bootstrap_form_for model, layout: 'horizontal' do |f|
+                f.input :email, label_size: 'col-xs-2', input_size: 'col-xs-4'
+              end
+            }
+
+            it "input sizes should override the form sizes" do
+              should have_selector "label.col-xs-2[for=#{field_id}]"
+              should have_selector ".form-group > .col-xs-4 > input##{field_id}"
+            end
+          end
         end
       end
     end
@@ -312,7 +341,7 @@ describe SimpleBootstrapForm, type: :helper do
                                   field_size: 'sm-10',
                                   url: '/foo' do |f|
           f.input(:exampleInputEmail1) +
-          f.input(:exampleInputPassword1) +
+          f.input(:exampleInputPassword1, label: "Password") +
           f.input(:exampleInputFile, help: "Example block-level help text here.") +
           f.input(:check_me_out, as: :boolean)
         end
