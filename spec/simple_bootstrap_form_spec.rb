@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+def pretty_print(html)
+  Nokogiri::XML(html, &:noblanks).to_xhtml
+end
+
 describe SimpleBootstrapForm, type: :helper do
 
   def account_form
@@ -23,27 +27,11 @@ describe SimpleBootstrapForm, type: :helper do
     let(:model) { Account.new }
     let(:form_id) { 'new_account' }
 
-    subject do
-      account_form
-    end
-
-    #it "should generate a form" do
-    #  expect(subject).to eq(
-    #    '<form accept-charset="UTF-8" action="/accounts" class="form-horizontal" id="new_account" method="post">' +
-    #      '<div style="margin:0;padding:0;display:inline">'+
-    #        '<input name="utf8" type="hidden" value="&#x2713;" />'+
-    #      '</div>'+
-    #      '<div class="form-group">'+
-    #        '<label class="control-label col-sm-3" for="account_email"><abbr title="required">*</abbr> Email</label>'+
-    #        '<div class="col-sm-6">'+
-    #          '<input class="form-control" id="account_email" name="account[email]" placeholder="Email" required="required" type="email" />'+
-    #        '</div>'+
-    #      '</div>'+
-    #    '</form>'
-    #  )
-    #end
-
     describe "all forms" do
+      subject do
+        account_form
+      end
+
       it "should have an ID" do
         should have_selector %(form##{form_id}[action="/accounts"])
       end
@@ -58,6 +46,42 @@ describe SimpleBootstrapForm, type: :helper do
         describe "form-group" do
           it "should add a class describing the form group" do
             should have_selector '.form-group.account_email_group'
+          end
+
+          context "when a :group_class option is provided" do
+            subject {
+              helper.bootstrap_form_for model do |f|
+                f.input :email, group_class: "my_class"
+              end
+            }
+
+            it "should add that value as a class to the group" do
+              should have_selector '.form-group.my_class'
+            end
+          end
+
+          context "when :group_class is set to false on the input" do
+            subject {
+              helper.bootstrap_form_for model do |f|
+                f.input :email, group_class: false
+              end
+            }
+
+            it "should not add a field-specific class to that group" do
+              should have_element('.form-group').with_classes('form-group')
+            end
+          end
+
+          context "when :group_class is set to false on the form" do
+            subject {
+              helper.bootstrap_form_for model, group_class: false do |f|
+                f.input :email
+              end
+            }
+
+            it "should not add a field-specific class to the groups" do
+              should have_element('.form-group').with_classes('form-group')
+            end
           end
         end
 
@@ -214,30 +238,26 @@ describe SimpleBootstrapForm, type: :helper do
   end
 
   describe "getbootstrap.com examples" do
-    class Model
-      include ActiveModel::Validations
-      include ActiveModel::Conversion
-      include ActiveModel::Naming
+    describe "Basic example" do
+      class Model1
+        include ActiveModel::Validations
+        include ActiveModel::Conversion
+        include ActiveModel::Naming
 
-      def self.model_path
-        "foo"
+        def self.model_path
+          "foo"
+        end
+
+        attr_accessor :exampleInputEmail1
+        attr_accessor :exampleInputPassword1
+        attr_accessor :exampleInputFile
+        attr_accessor :check_me_out
       end
 
-      attr_accessor :exampleInputEmail1
-      attr_accessor :exampleInputPassword1
-      attr_accessor :exampleInputFile
-      attr_accessor :check_me_out
-    end
+      let!(:model) do
+        Model1.new
+      end
 
-    def pretty_print(html)
-      Nokogiri::XML(html, &:noblanks).to_xhtml
-    end
-
-    let!(:model) do
-      Model.new
-    end
-
-    describe "Basic example" do
       let(:basic_example_output_from_getbootstrap_dot_com) {
         <<-BASIC_EXAMPLE
 <form role="form">
@@ -301,19 +321,78 @@ describe SimpleBootstrapForm, type: :helper do
     end
 
     describe "Horizontal form" do
-      let(:horizontal_form_output_from_getbootstrap_dot_com) {
-        <<-HORIZONTAL_FORM
-<form class="form-horizontal" role="form">
+      class Model3
+        include ActiveModel::Validations
+        include ActiveModel::Conversion
+        include ActiveModel::Naming
+
+        def self.model_path
+          "foo"
+        end
+
+        attr_accessor :inputEmail3
+        attr_accessor :inputPassword3
+        attr_accessor :remember_me
+      end
+
+      let!(:model) do
+        Model3.new
+      end
+
+      let(:horizontal_form_output) {
+        # Original copy from getbootstrap.com
+        #<form class="form-horizontal" role="form">
+        #  <div class="form-group">
+        #    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+        #    <div class="col-sm-10">
+        #      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        #    </div>
+        #  </div>
+        #  <div class="form-group">
+        #    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+        #    <div class="col-sm-10">
+        #      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+        #    </div>
+        #  </div>
+        #  <div class="form-group">
+        #    <div class="col-sm-offset-2 col-sm-10">
+        #      <div class="checkbox">
+        #        <label>
+        #          <input type="checkbox"> Remember me
+        #        </label>
+        #      </div>
+        #    </div>
+        #  </div>
+        #  <div class="form-group">
+        #    <div class="col-sm-offset-2 col-sm-10">
+        #      <button type="submit" class="btn btn-default">Sign in</button>
+        #    </div>
+        #  </div>
+        #</form>
+
+        # Railsified version
+        # <form>
+        #   add accept-charset, action, id, method, model-specific class
+        # <label>
+        #   changed for= to model_field
+        # <input>
+        #   reorder input attributes to match Rails' order
+        #   add name=
+  <<-HORIZONTAL_FORM
+<form accept-charset="UTF-8" action="/foo" class="new_model3 form-horizontal" id="new_model3" method="post" role="form">
+  <div style=\"margin:0;padding:0;display:inline\">
+    <input name="utf8" type="hidden" value="&#x2713;" />
+  </div>
   <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <label class="col-sm-2 control-label" for="model3_inputEmail3">Email</label>
     <div class="col-sm-10">
-      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+      <input class="form-control" id="model3_inputEmail3" name="model3[inputEmail3]" placeholder="Email" type="email" />
     </div>
   </div>
   <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <label class="col-sm-2 control-label" for="model3_inputPassword3">Password</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+      <input class="form-control" id="model3_inputPassword3" name="model3[inputPassword3]" placeholder="Password" type="password" />
     </div>
   </div>
   <div class="form-group">
@@ -337,18 +416,18 @@ describe SimpleBootstrapForm, type: :helper do
       subject do
         helper.bootstrap_form_for model,
                                   layout: :horizontal,
-                                  label_size: 'sm-2',
-                                  field_size: 'sm-10',
+                                  label_size: 'col-sm-2',
+                                  input_size: 'col-sm-10',
+                                  group_class: false,
                                   url: '/foo' do |f|
-          f.input(:exampleInputEmail1) +
-          f.input(:exampleInputPassword1, label: "Password") +
-          f.input(:exampleInputFile, help: "Example block-level help text here.") +
-          f.input(:check_me_out, as: :boolean)
+          f.input(:inputEmail3, label: "Email", placeholder: "Email") +
+          f.input(:inputPassword3, label: "Password", placeholder: "Password") +
+          f.input(:remember_me, as: :boolean, label_size: 'col-sm-offset-2 col-sm-10')
         end
       end
 
       it "should generate the correct output" do
-        #expect(pretty_print subject).to eq horizontal_form_output_from_getbootstrap_dot_com
+        #expect(pretty_print subject).to eq horizontal_form_output
       end
     end
   end

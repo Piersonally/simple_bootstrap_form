@@ -26,22 +26,28 @@ module SimpleBootstrapForm
 
         def process_options(options)
           @options = options.dup
-          @label_size = @options.delete :label_size
-          @input_size = @options.delete :input_size
+          @label_size  = @options.delete :label_size
+          @input_size  = @options.delete :input_size
+          @label_text  = @options.delete :label
+          @group_class = @options.delete :group_class
         end
 
         def group_options
-          css_classes = CssClassList.new 'form-group', group_name
+          css_classes = CssClassList.new 'form-group', group_class
           css_classes << 'has-error' if has_error?
           { class: css_classes }
         end
 
-        def group_name # added as a class on form group to make it more testable
-          "#{@form_builder.object_name.to_s.underscore}_#{@name}_group"
+        def group_class # a class for the form group to make it more testable
+          case @group_class
+          when false; nil
+          when nil; "#{@form_builder.object_name.to_s.underscore}_#{@name}_group"
+          else @group_class
+          end
         end
 
         def field_label
-          @form_builder.label @name, label_text, label_options
+          @form_builder.label @name, @label_text, label_options
         end
 
         def label_text
@@ -60,7 +66,7 @@ module SimpleBootstrapForm
         def label_options
           css_classes = CssClassList.new 'control-label'
           css_classes << @label_size
-          { class: css_classes }
+          { class: css_classes.to_s }
         end
 
         def input_tag

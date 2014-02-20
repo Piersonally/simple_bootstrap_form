@@ -20,9 +20,10 @@ module SimpleBootstrapForm
 
       private
 
-      def process_options(options )
+      def process_options(options)
         @options = options.dup
         @options.delete :layout
+        @group_class = @options.delete :group_class
       end
 
       def options_for_rails_form_builder
@@ -42,6 +43,7 @@ module SimpleBootstrapForm
         options = supplied_options.dup
         options[:label_size] ||= field_label_size
         options[:input_size] ||= field_input_size
+        options[:group_class] = @group_class if @group_class == false
         options
       end
 

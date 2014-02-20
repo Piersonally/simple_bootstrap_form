@@ -12,7 +12,7 @@ module SimpleBootstrapForm
     end
 
     def to_s
-      join ' '
+      sort.join ' '
     end
 
     private
