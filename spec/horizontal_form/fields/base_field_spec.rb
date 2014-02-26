@@ -24,6 +24,16 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
 
   subject { described_class.new(form_builder, template, attr_name, options).to_s }
 
+  context "with no options" do
+    let(:options) { {} }
+
+    it "should raise an error" do
+      expect {
+       subject
+      }.to raise_error
+    end
+  end
+
   describe "Full example demonstrating all options" do
     let(:options) {
       {

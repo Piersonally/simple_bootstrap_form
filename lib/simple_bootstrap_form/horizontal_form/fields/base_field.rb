@@ -30,6 +30,9 @@ module SimpleBootstrapForm
           @input_size  = @options.delete :input_size
           @label_text  = @options.delete :label
           @group_class = @options.delete :group_class
+          unless @label_size && @input_size
+            raise "label_size and input_size are required options"
+          end
         end
 
         def group_options

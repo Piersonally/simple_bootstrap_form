@@ -7,7 +7,8 @@ describe SimpleBootstrapForm::FieldFactory do
   describe "#for_attribute" do
     let(:column) { double 'column' }
     let(:attr_name) { 'foo' }
-    let(:options) { {} }
+    let(:required_options) { { label_size: 'foo', input_size: 'bar' } }
+    let(:options) { required_options }
 
     def setup_stubs
       allow(builder).to receive(:object).and_return(model)
@@ -27,7 +28,7 @@ describe SimpleBootstrapForm::FieldFactory do
         it { expect(subject).to be_a SimpleBootstrapForm::HorizontalForm::Fields::TextField }
 
         context "when given an :as option" do
-          let(:options) { { as: :password } }
+          let(:options) { required_options.merge as: :password }
 
           it "should override the default field type with the supplied one" do
             expect(subject).to be_a SimpleBootstrapForm::HorizontalForm::Fields::PasswordField
