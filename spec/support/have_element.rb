@@ -4,38 +4,37 @@ RSpec::Matchers.define :have_element do |selector|
   match_for_should do |markup|
     @selector = selector
     @markup = markup
-    element_is_present && classes_match
+    element_is_present && classes_match && content_matches
   end
 
-  match_for_should_not do |markup|
-    @selector = selector
-    @markup = markup
-    !element_is_present || !classes_match
-  end
+  #match_for_should_not do |markup|
+  #  @selector = selector
+  #  @markup = markup
+  #  !element_is_present || !classes_match || !content_matches
+  #end
 
   failure_message_for_should do |markup|
     if the_element.nil?
-      "expected to find an element matching #{selector} in #{markup}"
-    elsif @expected_classes
-      actual_classes = @element['class'].split(' ')
-      "expected #{inspect_the_element} to have classes \"#{@expected_classes.sort.join(' ')}\" but it has classes \"#{actual_classes.sort.join(' ')}\""
+      "expected to find an element matching #{actual_selector} in #{markup}"
     else
+      error_messages = [
+        classes_match_error_message(:should),
+        content_matches_error_message(:should)
+      ].reject(&:blank?)
+      "expected #{inspect_the_element} " + error_messages.join(' and ')
     end
   end
 
   failure_message_for_should_not do |markup|
-    "expected #{inspect_the_element} not to have classes \"#{@expected_classes.sort.join(' ')}\" in #{markup}"
+    error_messages = [
+      classes_match_error_message(:should_not),
+      content_matches_error_message(:should_not)
+    ].reject(&:blank?)
+    "expected #{inspect_the_element} " + error_messages.join(' and ')
   end
 
   def element_is_present
     the_element.is_a? Nokogiri::XML::Element
-  end
-
-  def check_element(element)
-    if @expected_classes
-    else
-      true
-    end
   end
 
   ########## Chain assertions that will affect the selector
@@ -83,14 +82,45 @@ RSpec::Matchers.define :have_element do |selector|
   end
   
   def actual_classes
-    the_element['class'].split ' '
+    @actual_classes ||= the_element['class'].split ' '
   end
   
   def classes_match
     return true unless @expected_classes
     actual_classes.sort == @expected_classes.sort
   end
-  
+
+  def classes_match_error_message(comparison=:should)
+    return nil if classes_match
+    "%s have classes \"%s\" but it has classes \"%s\"" % [
+      (comparison == :should ? 'to' : 'not to'),
+      @expected_classes.sort.join(' '),
+      @actual_classes.sort.join(' ')
+    ]
+  end
+
+  chain :with_content do |content|
+    @expected_content = content
+  end
+
+  def actual_content
+    @actual_content ||= the_element.text
+  end
+
+  def content_matches
+    return true unless @expected_content
+    actual_content == @expected_content
+  end
+
+  def content_matches_error_message(comparison=:should)
+    return nil if comparison == :should && content_matches
+    return nil if comparison == :should_not && !content_matches
+    "%s have content \"%s\" but it has content \"%s\"" % [
+      (comparison == :should ? 'to' : 'not to'),
+      @expected_content, @actual_content
+    ]
+  end
+
   ########## Utility methods
   
   def the_element
