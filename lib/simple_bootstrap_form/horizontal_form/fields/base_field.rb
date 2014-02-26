@@ -50,11 +50,11 @@ module SimpleBootstrapForm
         end
 
         def field_label
-          @form_builder.label @name, @label_text, label_options
+          @form_builder.label @name, label_text, label_options
         end
 
         def label_text
-          text = @options[:label] || @name.to_s.humanize.capitalize
+          text = @label_text || @name.to_s.humanize.capitalize
           required_asterisk + text
         end
 

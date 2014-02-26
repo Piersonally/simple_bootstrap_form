@@ -71,8 +71,7 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
       let(:options) { required_options.merge group_class: false }
 
       it "should only give the group class form-group" do
-        expect(subject).to have_element('div.form-group')
-                                .with_only_classes('form-group')
+        expect(subject).to have_element('div.form-group').with_only_classes('form-group')
       end
     end
 
@@ -102,9 +101,21 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
       let(:options) { required_options }
 
       it "should generate the label by humanizing the object name" do
-        expect(subject).to include(
-          '<label class="col-sm-3 control-label" for="model1_attr1">Attr1</label>'
+        expect(subject).to have_element('label').with_content('Attr1')
+      end
+    end
+
+    context "for a required field" do
+      let(:options) { required_options }
+
+      before do
+        allow(Model1).to receive(:validators_on).with('attr1').and_return(
+          [ ActiveModel::Validations::PresenceValidator.new(attributes:'') ]
         )
+      end
+
+      it "should add an asterisk" do
+        expect(subject).to have_element('label').with_content("* Attr1")
       end
     end
 
@@ -112,9 +123,19 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
       let(:options) { required_options.merge label: "Custom Label" }
 
       it "should use the custom label" do
-        expect(subject).to include(
-          '<label class="col-sm-3 control-label" for="model1_attr1">Custom Label</label>'
-        )
+        expect(subject).to have_element('label').with_content('Custom Label')
+      end
+
+      context "for a required field" do
+        before do
+          allow(Model1).to receive(:validators_on).with('attr1').and_return(
+            [ ActiveModel::Validations::PresenceValidator.new(attributes:'') ]
+          )
+        end
+
+        it "should add an asterisk" do
+          expect(subject).to have_element('label').with_content("* Custom Label")
+        end
       end
     end
   end
