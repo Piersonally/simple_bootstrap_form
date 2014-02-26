@@ -155,3 +155,10 @@ Generates (spaces added for clarity):
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## TODO
+
+* Vertical Form
+* Inline Form
+* bootstrap\_fields\_for
+* Suppress placeholder
