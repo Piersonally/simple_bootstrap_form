@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-def pretty_print(html)
-  Nokogiri::XML(html, &:noblanks).to_xhtml
-end
-
 describe SimpleBootstrapForm, type: :helper do
 
   def account_form
@@ -426,7 +422,7 @@ describe SimpleBootstrapForm, type: :helper do
       }
 
       it "should generate the correct output" do
-        #expect(pretty_print subject).to eq horizontal_form_output
+        #expect(pretty_html subject).to eq horizontal_form_output
       end
     end
   end
