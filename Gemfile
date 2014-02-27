@@ -7,6 +7,7 @@ group :development, :test do
   # Gems required to run guard-rspec and send notifications to OS Notification
   # System
   gem 'guard-rspec', require: false
+  gem 'guard-markdown'
   gem 'terminal-notifier-guard'
 
   gem 'byebug'
