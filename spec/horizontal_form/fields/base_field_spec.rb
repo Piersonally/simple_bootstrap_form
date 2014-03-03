@@ -35,7 +35,7 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
     end
   end
 
-  describe "Full example demonstrating all options" do
+  describe "Full example demonstrating many options" do
     let(:options) {
       {
         label_size: 'col-xs-4',

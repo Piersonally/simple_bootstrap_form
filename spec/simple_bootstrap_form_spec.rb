@@ -230,6 +230,23 @@ describe SimpleBootstrapForm, type: :helper do
           end
         end
       end
+
+      describe "select" do
+        let(:field_id) { "account_email" }
+        before { model.email = "foo" }
+
+        subject {
+          helper.bootstrap_form_for model, layout: 'horizontal' do |f|
+            f.input :email, collection: %w[foo bar]
+          end
+        }
+
+        it "should generate a select tag with options" do
+          should have_element '.form-group.account_email_group > div.col-sm-6 > select#account_email'
+          should have_element('select#account_email > option[value="foo"][selected="selected"]').with_content("foo")
+          should have_element('select#account_email > option[value="bar"]').with_content("bar")
+        end
+      end
     end
   end
 
@@ -289,7 +306,7 @@ describe SimpleBootstrapForm, type: :helper do
         end
       }
 
-      it "should generate the correct output"
+      #it "should generate the correct output"
     end
 
     describe "Inline form" do

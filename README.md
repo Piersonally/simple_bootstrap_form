@@ -170,6 +170,7 @@ Generates (spaces added for clarity):
      `string`        | `input[type=text]`                                 | `string`
      `text`          | `textarea`                                         | `text`
      `datetime`      | `input[type=text]` setup for jquery.datetimepicker | `datetime`
+     `select`        | `select`                                           | just provide a `collection:` option
 
 ## Contributing
 

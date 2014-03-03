@@ -61,6 +61,12 @@ describe SimpleBootstrapForm::FieldFactory do
 
         it { expect(subject).to be_a SimpleBootstrapForm::HorizontalForm::Fields::DatetimeField }
       end
+
+      context "when given a collection option" do
+        let(:options) { required_options.merge collection: %w[one two] }
+
+        it { expect(subject).to be_a SimpleBootstrapForm::HorizontalForm::Fields::SelectField }
+      end
     end
   end
 end

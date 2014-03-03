@@ -28,6 +28,8 @@ module SimpleBootstrapForm
     def field_class_type_prefix(attr, options)
       if options[:as]
         options[:as].to_s.capitalize
+      elsif options.has_key? :collection
+        'Select'
       else
         derive_field_class_prefix attr
       end
