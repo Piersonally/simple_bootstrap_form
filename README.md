@@ -135,6 +135,18 @@ Generates (spaces added for clarity):
 </form>
 ```
 
+### Input Options
+
+| Option         | Meaning                        | Default
+|----------------|--------------------------------|------------
+| `:as`          | Override column type. Use on of the types from the _Supported Field Types_ table below.
+| `:label`       | Set custom label. | Humanized and titlized attribute name.
+| `:placeholder` | Set custom placeholder. | Humanized and titlized attribute name.
+| `:group_class` | For ease of testing in Capybara, a class is added to each `form-group` div, constructed from the object name and attribute name, e.g. `article_title_group`.  This option allows you to override that class name, or suppress using the value `false`. | (_model_)\_(_attribute_)\_group
+| `:label_size`  | Bootstrap CSS class to use to size the label for this field.  By default this is set by the form.  This option is only needed if you need a label to be differently sized from the rest of the form's labels.
+| `:input_size`  | Bootstrap CSS class to use to size the input for this field.  By default these are set by the form.  This option is only needed if you need an input to be differently sized from the rest of the form's inputs.
+| `:required`    | Set this to `true`/`false` to override whether this field should be marked required. | If an attribute has a presence validator, it will be marked required.
+
 ## Support
 
 #### Bootstrap Support
@@ -143,10 +155,21 @@ Generates (spaces added for clarity):
 
 #### Simple Form API Support
 
-* Input types: boolean, datetime, email, password, text, textarea.  These are
-  trivial to add.  Just take a look in fields/.
 * Required fields.
 * Placeholders, automatic and custom.
+
+#### Supported Field Types
+
+* These are straighforward to add.  Just take a look in fields/.
+
+     Field Type      | Generated HTML Element                             | Database Column Type
+     --------------- |:---------------------------------------------------|:--------------------
+     `boolean`       | `input[type=checkbox]`                             | `boolean`
+     `email`         | `input[type=email]`                                | `string` with `name =~ /email/`
+     `password`      | `input[type=password]`                             | `string` with `name =~ /password/`
+     `string`        | `input[type=text]`                                 | `string`
+     `text`          | `textarea`                                         | `text`
+     `datetime`      | `input[type=text]` setup for jquery.datetimepicker | `datetime`
 
 ## Contributing
 

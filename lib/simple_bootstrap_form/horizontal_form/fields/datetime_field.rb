@@ -1,6 +1,9 @@
 module SimpleBootstrapForm
   module HorizontalForm
     module Fields
+
+      # Creates a text field that should be initialized with
+      # jquery.datetimepicker
       class DatetimeField < BaseField
 
         self.type = 'datetime'
