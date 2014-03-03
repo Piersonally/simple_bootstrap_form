@@ -21,6 +21,7 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
   let(:form_builder) { SimpleBootstrapForm::HorizontalForm::FormBuilder.new object_name, object, template }
   let(:attr_name) { "attr1" }
   let(:required_options) { { label_size: 'col-sm-3', input_size: "col-sm-6" } }
+  let(:options) { required_options }
 
   subject { described_class.new(form_builder, template, attr_name, options).to_s }
 
@@ -98,16 +99,12 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
 
   describe "Label" do
     context "with no label option" do
-      let(:options) { required_options }
-
       it "should generate the label by humanizing the object name" do
         expect(subject).to have_element('label').with_content('Attr1')
       end
     end
 
     context "for a required field" do
-      let(:options) { required_options }
-
       before do
         allow(Model1).to receive(:validators_on).with('attr1').and_return(
           [ ActiveModel::Validations::PresenceValidator.new(attributes:'') ]
@@ -142,8 +139,6 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
 
   describe "Placeholder" do
     context "with no placeholder option" do
-      let(:options) { required_options }
-
       it "should generate the placeholder by humanizing the object name" do
         expect(subject).to have_element('input').with_placeholder('Attr1')
       end
@@ -154,6 +149,42 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
 
       it "should use the custom label" do
         expect(subject).to have_element('input').with_placeholder('Custom Placeholder')
+      end
+    end
+  end
+
+  describe "Required Fields" do
+    context "for a required field" do
+      before do
+        allow(Model1).to receive(:validators_on).with('attr1').and_return(
+          [ ActiveModel::Validations::PresenceValidator.new(attributes:'') ]
+        )
+      end
+
+      it "should add required=required to the input" do
+        expect(subject).to have_element('input').with_attr_value(:required, 'required')
+      end
+
+      context "given option :required => false" do
+        let(:options) { required_options.merge required: false }
+
+        it "should not add required=required to the input" do
+          expect(subject).not_to have_element('input').with_attr_value(:required, 'required')
+        end
+      end
+    end
+
+    context "for an optional field" do
+      it "should not add required=required to the input" do
+        expect(subject).not_to have_element('input').with_attr_value(:required, 'required')
+      end
+
+      context "given option :required => true" do
+        let(:options) { required_options.merge required: true }
+
+        it "should not add required=required to the input" do
+          expect(subject).to have_element('input').with_attr_value(:required, 'required')
+        end
       end
     end
   end

@@ -107,6 +107,7 @@ module SimpleBootstrapForm
 
         def required?
           return false unless model
+          return @options[:required] if @options.has_key?(:required)
           model.class.validators_on(@name).any? do |validator|
             validator.kind_of? ActiveModel::Validations::PresenceValidator
           end
