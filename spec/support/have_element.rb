@@ -18,26 +18,35 @@ RSpec::Matchers.define :have_element do |selector|
       "expected to find an element matching #{actual_selector} in #{markup}"
     else
       error_messages = [
-        classes_match_error_message(:should),
+        classes_match_error_message,
         content_matches_error_message(:should)
       ].reject(&:blank?)
-      "expected #{inspect_the_element} " + error_messages.join(' and ')
+      "expected #{inspect_the_element} to " + error_messages.join(' and ')
     end
   end
 
   failure_message_for_should_not do |markup|
-    error_messages = [
-      classes_match_error_message(:should_not),
-      content_matches_error_message(:should_not)
-    ].reject(&:blank?)
-    "expected #{inspect_the_element} " + error_messages.join(' and ')
+    if checking_classes? || checking_content?
+      if the_element.nil?
+        # If we have post tag-retrieval checks, it is an error not to find the tag
+        "expected to find an element matching #{actual_selector} in #{markup}"
+      else
+        error_messages = [
+          classes_match_error_message,
+          content_matches_error_message(:should_not)
+        ].reject(&:blank?)
+        "expected #{inspect_the_element} not to " + error_messages.join(' and ')
+      end
+    else
+      "expected not to find an element matching #{actual_selector} in #{markup}"
+    end
   end
 
   def element_is_present
     the_element.is_a? Nokogiri::XML::Element
   end
 
-  ########## Chain assertions that will affect the selector
+  ########## Chain assertions used to build the selector
 
   chain :with_id do |id|
     @id = id
@@ -81,6 +90,10 @@ RSpec::Matchers.define :have_element do |selector|
     @expected_classes = classes.split ' '
   end
   
+  def checking_classes?
+    !!@expected_classes
+  end
+  
   def actual_classes
     @actual_classes ||= the_element['class'].split ' '
   end
@@ -90,10 +103,9 @@ RSpec::Matchers.define :have_element do |selector|
     actual_classes.sort == @expected_classes.sort
   end
 
-  def classes_match_error_message(comparison=:should)
-    return nil if classes_match
-    "%s have classes \"%s\" but it has classes \"%s\"" % [
-      (comparison == :should ? 'to' : 'not to'),
+  def classes_match_error_message
+    return nil unless checking_classes?
+    "have classes \"%s\" but it has classes \"%s\"" % [
       @expected_classes.sort.join(' '),
       @actual_classes.sort.join(' ')
     ]
@@ -103,6 +115,10 @@ RSpec::Matchers.define :have_element do |selector|
     @expected_content = content
   end
 
+  def checking_content?
+    !!@expected_content
+  end
+  
   def actual_content
     @actual_content ||= the_element.text
   end
@@ -113,10 +129,10 @@ RSpec::Matchers.define :have_element do |selector|
   end
 
   def content_matches_error_message(comparison=:should)
+    return nil unless checking_content?
     return nil if comparison == :should && content_matches
     return nil if comparison == :should_not && !content_matches
-    "%s have content \"%s\" but it has content \"%s\"" % [
-      (comparison == :should ? 'to' : 'not to'),
+    "have content \"%s\" but it has content \"%s\"" % [
       @expected_content, @actual_content
     ]
   end
