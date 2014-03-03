@@ -3,7 +3,7 @@ module SimpleBootstrapForm
     module Fields
       class EmailField < BaseField
 
-        self.type = 'email'
+        self.input_type = 'email'
       end
     end
   end

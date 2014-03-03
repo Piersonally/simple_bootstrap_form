@@ -3,7 +3,7 @@ module SimpleBootstrapForm
     module Fields
       class PasswordField < BaseField
 
-        self.type = 'password'
+        self.input_type = 'password'
       end
     end
   end

@@ -4,7 +4,7 @@ module SimpleBootstrapForm
       class BaseField
 
         class << self
-          attr_accessor :type
+          attr_accessor :input_type
         end
 
         def initialize(form_builder, template, name, options)
@@ -81,7 +81,7 @@ module SimpleBootstrapForm
         def input_options
           @options.merge! class: 'form-control',
                           placeholder: placeholder,
-                          type: self.class.type
+                          type: self.class.input_type
           @options.merge! required: 'required' if required?
           @options
         end

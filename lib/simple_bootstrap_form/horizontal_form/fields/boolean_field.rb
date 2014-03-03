@@ -3,7 +3,7 @@ module SimpleBootstrapForm
     module Fields
       class BooleanField < BaseField
 
-        self.type = 'checkbox'
+        self.input_type = 'checkbox'
 
         def input_tag
           @template.content_tag(:div, class: 'col-sm-6') do

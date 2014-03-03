@@ -3,7 +3,7 @@ module SimpleBootstrapForm
     module Fields
       class TextField < BaseField
 
-        self.type = 'text'
+        self.input_type = 'text'
       end
     end
   end

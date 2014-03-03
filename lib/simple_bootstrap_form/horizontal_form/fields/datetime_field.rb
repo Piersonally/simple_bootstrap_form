@@ -6,7 +6,7 @@ module SimpleBootstrapForm
       # jquery.datetimepicker
       class DatetimeField < BaseField
 
-        self.type = 'datetime'
+        self.input_type = 'datetime'
 
         def input_tag
           @template.content_tag(:div, class: 'col-sm-6') do
