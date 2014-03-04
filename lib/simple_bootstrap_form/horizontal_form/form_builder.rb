@@ -2,10 +2,10 @@ module SimpleBootstrapForm
   module HorizontalForm
     class FormBuilder < ActionView::Helpers::FormBuilder
 
-      def initialize(object_name, object, template, options={}, block=nil)
+      def initialize(object_name, object, template, options={})
         @field_factory = FieldFactory.new self, template
         process_options options
-        super object_name, object, template, options_for_rails_form_builder, block
+        super object_name, object, template, options_for_rails_form_builder
       end
 
       def input(name, supplied_options = {})
