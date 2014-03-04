@@ -1,19 +1,13 @@
 require 'nokogiri'
 
 RSpec::Matchers.define :have_element do |selector|
-  match_for_should do |markup|
+  match do |markup|
     @selector = selector
     @markup = markup
     element_is_present && classes_match && content_matches
   end
 
-  #match_for_should_not do |markup|
-  #  @selector = selector
-  #  @markup = markup
-  #  !element_is_present || !classes_match || !content_matches
-  #end
-
-  failure_message_for_should do |markup|
+  failure_message do |markup|
     if the_element.nil?
       "expected to find an element matching #{actual_selector} in #{markup}"
     else
@@ -25,7 +19,7 @@ RSpec::Matchers.define :have_element do |selector|
     end
   end
 
-  failure_message_for_should_not do |markup|
+  failure_message_when_negated do |markup|
     if checking_classes? || checking_content?
       if the_element.nil?
         # If we have post tag-retrieval checks, it is an error not to find the tag

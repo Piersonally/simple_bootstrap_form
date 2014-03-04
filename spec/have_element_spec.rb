@@ -30,7 +30,7 @@ describe "have_element RSpec matcher" do
     it "should have an appropriate error message for should" do
       matcher = have_element("input").with_only_classes('bar')
       expect(matcher.matches? subject).to eq false
-      expect(matcher.failure_message_for_should).to eq(
+      expect(matcher.failure_message).to eq(
         %Q{expected #{subject} to have classes "bar" but it has classes "bar baz"}
       )
     end
@@ -38,7 +38,7 @@ describe "have_element RSpec matcher" do
     it "should have an appropriate error message for should not" do
       matcher = have_element("input").with_only_classes('bar baz')
       expect(matcher.matches? subject).to eq true
-      expect(matcher.failure_message_for_should_not).to eq(
+      expect(matcher.failure_message_when_negated).to eq(
         %Q{expected #{subject} not to have classes "bar baz" but it has classes "bar baz"}
       )
     end
@@ -62,7 +62,7 @@ describe "have_element RSpec matcher" do
                                      .with_placeholder('Attr One')
 
       expect(matcher.matches? subject).to eq false
-      expect(matcher.failure_message_for_should).to eq(
+      expect(matcher.failure_message).to eq(
         %Q{expected #{subject} to have classes "bad class list" but it has classes "bar baz"}
       )
     end
@@ -91,7 +91,7 @@ describe "have_element RSpec matcher" do
       it "should have an appropriate error message for should" do
         matcher = have_element("div").with_id('foo').with_content('Bad Content')
         expect(matcher.matches? subject).to eq false
-        expect(matcher.failure_message_for_should).to eq(
+        expect(matcher.failure_message).to eq(
           %Q{expected #{inspected_subject} to } +
           %Q{have content "Bad Content" but it has content "Some Content"}
         )
@@ -100,7 +100,7 @@ describe "have_element RSpec matcher" do
       it "should have an appropriate error message for should not" do
         matcher = have_element("div").with_id('foo').with_content('Some Content')
         expect(matcher.matches? subject).to eq true
-        expect(matcher.failure_message_for_should_not).to eq(
+        expect(matcher.failure_message_when_negated).to eq(
           %Q{expected #{inspected_subject} not to } +
           %Q{have content "Some Content" but it has content "Some Content"}
         )
@@ -111,7 +111,7 @@ describe "have_element RSpec matcher" do
                                      .with_only_classes('bar')
                                      .with_content('Bad Content')
         expect(matcher.matches? subject).to eq false
-        expect(matcher.failure_message_for_should).to eq(
+        expect(matcher.failure_message).to eq(
           %Q{expected #{inspected_subject} to } +
           %Q{have classes "bar" but it has classes "c1 c2"} +
           %Q{ and have content "Bad Content" but it has content "Some Content"}
