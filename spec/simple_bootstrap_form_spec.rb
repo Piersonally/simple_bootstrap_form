@@ -351,78 +351,65 @@ describe SimpleBootstrapForm, type: :helper do
         Model3.new
       end
 
-      let(:horizontal_form_output) {
-        # Original copy from getbootstrap.com
-        #<form class="form-horizontal" role="form">
-        #  <div class="form-group">
-        #    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-        #    <div class="col-sm-10">
-        #      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-        #    </div>
-        #  </div>
-        #  <div class="form-group">
-        #    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-        #    <div class="col-sm-10">
-        #      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-        #    </div>
-        #  </div>
-        #  <div class="form-group">
-        #    <div class="col-sm-offset-2 col-sm-10">
-        #      <div class="checkbox">
-        #        <label>
-        #          <input type="checkbox"> Remember me
-        #        </label>
-        #      </div>
-        #    </div>
-        #  </div>
-        #  <div class="form-group">
-        #    <div class="col-sm-offset-2 col-sm-10">
-        #      <button type="submit" class="btn btn-default">Sign in</button>
-        #    </div>
-        #  </div>
-        #</form>
+      # Original copy from getbootstrap.com
+      #<form class="form-horizontal" role="form">
+      #  <div class="form-group">
+      #    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+      #    <div class="col-sm-10">
+      #      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+      #    </div>
+      #  </div>
+      #  <div class="form-group">
+      #    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+      #    <div class="col-sm-10">
+      #      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+      #    </div>
+      #  </div>
+      #  <div class="form-group">
+      #    <div class="col-sm-offset-2 col-sm-10">
+      #      <div class="checkbox">
+      #        <label>
+      #          <input type="checkbox"> Remember me
+      #        </label>
+      #      </div>
+      #    </div>
+      #  </div>
+      #  <div class="form-group">
+      #    <div class="col-sm-offset-2 col-sm-10">
+      #      <button type="submit" class="btn btn-default">Sign in</button>
+      #    </div>
+      #  </div>
+      #</form>
 
-        # Railsified version
-        # <form>
-        #   add accept-charset, action, id, method, model-specific class
-        # <label>
-        #   changed for= to model_field
-        # <input>
-        #   reorder input attributes to match Rails' order
-        #   add name=
-  <<-HORIZONTAL_FORM
-<form accept-charset="UTF-8" action="/foo" class="new_model3 form-horizontal" id="new_model3" method="post" role="form">
-  <div style=\"margin:0;padding:0;display:inline\">
-    <input name="utf8" type="hidden" value="&#x2713;" />
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="model3_inputEmail3">Email</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="model3_inputEmail3" name="model3[inputEmail3]" placeholder="Email" type="email" />
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="model3_inputPassword3">Password</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="model3_inputPassword3" name="model3[inputPassword3]" placeholder="Password" type="password" />
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"> Remember me
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Sign in</button>
-    </div>
-  </div>
-</form>
-        HORIZONTAL_FORM
+      # The snippets below have been "Railsified" as follows:
+      # <form>
+      #   add accept-charset, action, id, method, model-specific class
+      # <label>
+      #   changed for= to model_field
+      # <input>
+      #   reorder input attributes to match Rails' order
+      #   add name=
+
+      let(:email_field_markup) {
+        outdent <<-HTML
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="model3_inputEmail3">Email</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="model3_inputEmail3" name="model3[inputEmail3]" placeholder="Email" type="email" />
+            </div>
+          </div>
+        HTML
+      }
+
+      let(:password_field_markup) {
+        outdent <<-HTML
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="model3_inputPassword3">Password</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="model3_inputPassword3" name="model3[inputPassword3]" placeholder="Password" type="password" />
+            </div>
+          </div>
+        HTML
       }
 
       subject {
@@ -438,8 +425,21 @@ describe SimpleBootstrapForm, type: :helper do
         end
       }
 
-      it "should generate the correct output" do
-        #expect(pretty_html subject).to eq horizontal_form_output
+      it "should generate the correct form tag" do
+        expect(subject.to_s).to have_element('form')
+                                .with_id('new_model3')
+                                .with_only_classes('form-horizontal new_model3')
+                                .with_attr_value(:action, '/foo')
+      end
+
+      it "should generate the correct email field" do
+        markup = Nokogiri::XML(subject.to_s).css('.form-group').first
+        expect(pretty_html markup.to_s).to eq email_field_markup
+      end
+
+      it "should generate the correct password field" do
+        markup = Nokogiri::XML(subject.to_s).css('.form-group')[1]
+        expect(pretty_html markup.to_s).to eq password_field_markup
       end
     end
   end
