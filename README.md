@@ -180,6 +180,12 @@ Generates (spaces added for clarity):
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+## Releasing
+
+Update lib/simple_bootstrap_form/version.rb, commit & push
+rake build
+rake release
+
 ## TODO
 
 * Vertical Form
