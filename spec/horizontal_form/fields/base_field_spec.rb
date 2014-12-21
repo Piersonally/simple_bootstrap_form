@@ -51,7 +51,7 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::BaseField do
         <div class="form-group custom-group-class">
           <label class="col-xs-4 control-label" for="model1_attr1">Custom Label</label>
           <div class="col-xs-6">
-            <input class="form-control" id="model1_attr1" name="model1[attr1]" placeholder="Custom Placeholder" type="text" />
+            <input placeholder="Custom Placeholder" class="form-control" type="text" name="model1[attr1]" id="model1_attr1" />
           </div>
         </div>
       HTML

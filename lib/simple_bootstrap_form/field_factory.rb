@@ -46,7 +46,9 @@ module SimpleBootstrapForm
     end
 
     def attr_column_type(attr)
-      @builder.object.try(:column_for_attribute, attr).try(:type) || :string
+      ActiveSupport::Deprecation.silence do
+        @builder.object.try(:column_for_attribute, attr).try(:type) || :string
+      end
     end
 
     def string_field_class_prefix_based_on_column_name(attr)

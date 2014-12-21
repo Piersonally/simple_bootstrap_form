@@ -395,7 +395,7 @@ describe SimpleBootstrapForm, type: :helper do
           <div class="form-group">
             <label class="col-sm-2 control-label" for="model3_inputEmail3">Email</label>
             <div class="col-sm-10">
-              <input class="form-control" id="model3_inputEmail3" name="model3[inputEmail3]" placeholder="Email" type="email" />
+              <input placeholder="Email" class="form-control" type="email" name="model3[inputEmail3]" id="model3_inputEmail3" />
             </div>
           </div>
         HTML
@@ -406,7 +406,7 @@ describe SimpleBootstrapForm, type: :helper do
           <div class="form-group">
             <label class="col-sm-2 control-label" for="model3_inputPassword3">Password</label>
             <div class="col-sm-10">
-              <input class="form-control" id="model3_inputPassword3" name="model3[inputPassword3]" placeholder="Password" type="password" />
+              <input placeholder="Password" class="form-control" type="password" name="model3[inputPassword3]" id="model3_inputPassword3" />
             </div>
           </div>
         HTML

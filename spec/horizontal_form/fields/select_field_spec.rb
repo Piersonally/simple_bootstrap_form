@@ -40,7 +40,7 @@ describe SimpleBootstrapForm::HorizontalForm::Fields::SelectField do
         <div class="form-group model1_attr1_group">
           <label class="col-sm-3 control-label" for="model1_attr1">Attr1</label>
           <div class="col-sm-6">
-            <select class="form-control" id="model1_attr1" name="model1[attr1]">
+            <select class="form-control" name="model1[attr1]" id="model1_attr1">
               <option value="1">1</option>
               <option value="3">3</option>
               <option selected="selected" value="5">5</option>
