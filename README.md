@@ -182,9 +182,10 @@ Generates (spaces added for clarity):
 
 ## Releasing
 
-Update lib/simple_bootstrap_form/version.rb, commit & push
-rake build
-rake release
+1. Update `lib/simple_bootstrap_form/version.rb`
+2. `git commit && git push`
+3. `rake build`
+4. `rake release`
 
 ## TODO
 
